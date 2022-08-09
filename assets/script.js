@@ -2,24 +2,11 @@ let startBtn = document.querySelector('#start');
 let timerEl = document.querySelector('#timer');
 let containerEl = document.querySelector('#container');
 let questionEl = document.querySelector('#question');
-let answerEl = document.querySelector('#answers')
+let answerEl = document.querySelector('#answers');
+let score = document.querySelector('#current-score');
 let timeLeft = 30;
-
-let startGame = () => {
-    startBtn.classList.add('hide')
-    setInterval(function () {
-        timeLeft--;
-        if (timeLeft >= 0) {
-            seconds = document.getElementById('seconds-left')
-            seconds.innerHTML = timeLeft;
-        } else {
-            seconds.innerHTML = "GAMEOVER"
-        }
-    }, 1000)
-
-}
-
-startBtn.addEventListener('click', startGame)
+let currentQuestionIndex = 0;
+let userScore = 0;
 
 let questions = [
     {
@@ -43,14 +30,62 @@ let questions = [
     }
 ]
 
-let renderCurrentQuestion = () => {
-    let questionArr = questions;
-    questionArr.forEach(questions => document.getElementById('question') = questions)
+answerEl.addEventListener('click', (event) => {
+    if (event.target.matches('button')) {
+        let userGuess = event.target.getAttribute('data-answer');
+        
+        if (userGuess) {
+            userScore++;
+        } else {
+            userScore--
+        }
+
+        if (currentQuestionIndex !== questions.length - 1) {
+            currentQuestionIndex++;
+            renderCurrentQuestion();
+        }
+    }
+
+    score.innerHTML = userScore;
+});
+
+
+let startGame = () => {
+    startBtn.classList.add('hide')
+    setInterval(function () {
+        timeLeft--;
+        if (timeLeft >= 0) {
+            seconds = document.getElementById('seconds-left')
+            seconds.innerHTML = timeLeft;
+        } else {
+            seconds.innerHTML = "GAMEOVER"
+        }
+    }, 1000)
+
+
+    renderCurrentQuestion();
 
 }
 
-renderCurrentQuestion();
+startBtn.addEventListener('click', startGame)
 
+
+let renderCurrentQuestion = () => {
+    let currentQuestion = questions[currentQuestionIndex];
+    console.log(currentQuestion);
+    questionEl.innerText = currentQuestion.question;
+
+    answerEl.innerHTML = '';
+    for (let i = 0; i < currentQuestion.answers.length; i++) {
+        let answer = document.createElement('li');
+        let btn = document.createElement('button');
+    
+        btn.textContent = currentQuestion.answers[i].text;
+        btn.setAttribute('data-answer', currentQuestion.answers[i].correct);
+        answer.appendChild(btn);
+        answerEl.appendChild(answer);
+    }
+}
 
 
 
