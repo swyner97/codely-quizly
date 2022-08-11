@@ -4,9 +4,12 @@ let containerEl = document.querySelector('#container');
 let questionEl = document.querySelector('#question');
 let answerEl = document.querySelector('#answers');
 let score = document.querySelector('#current-score');
+let answer = document.createElement('li');
+let btn = document.createElement('button');
 let timeLeft = 30;
 let currentQuestionIndex = 0;
 let userScore = 0;
+
 
 let questions = [
     {
@@ -33,11 +36,13 @@ let questions = [
 answerEl.addEventListener('click', (event) => {
     if (event.target.matches('button')) {
         let userGuess = event.target.getAttribute('data-answer');
-        
+        let answers = document.querySelector('#answers');
+        let answerAttr = answers.getAttribute('data-answer');
+        console.log(answerAttr)
+
+
         if (userGuess) {
             userScore++;
-        } else {
-            userScore--
         }
 
         if (currentQuestionIndex !== questions.length - 1) {
@@ -62,7 +67,6 @@ let startGame = () => {
         }
     }, 1000)
 
-
     renderCurrentQuestion();
 
 }
@@ -86,7 +90,6 @@ let renderCurrentQuestion = () => {
         answerEl.appendChild(answer);
     }
 }
-
 
 
 
